@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <title>Post by {{ post.author_name }} </title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Harry Potter Posts</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Hogvarts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts' %}">Posts</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h3>Post # {{ post.id }}</h3>
+
+    <div class="card" style="margin-top: 15px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.author_name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.pub_date }}</h6>
+            <p class="card-text">{{ post.text }}</p>
+
+            <h5>Comments...</h5>
+            {% for c in post.comments.all %}
+            <div class="card" style="margin-top: 15px; margin-bottom: 40px;">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">{{ c.author_name }} {{ c.pub_date }}</h6>
+                    <p class="card-text">{{ c.text }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+            <h5>add comment</h5>
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ form.errors }}</strong>
+            </div>
+            {% endif %}
+
+            <form class="form" method="post" action="{% url 'comment' %}">
+                {% csrf_token %}
+                <div class="mb-3" style="padding: 10px">
+                    <label for="author-name-input" class="form-label">Author name</label>
+                    <input type="text" class="form-control" id="author-name-input" placeholder="Enter your name...">
+                </div>
+                <div class="mb-3">
+                    <label for="text-textarea" class="form-label">Enter your comment...</label>
+                    <textarea name="text" class="form-control" placeholder="Enter text here..." id="text-textarea"
+                              style="height: 100px"></textarea>
+                    <button type="submit" class="btn btn-dark" style="margin-top: 10px">add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+
+
+</body>
+</html>
